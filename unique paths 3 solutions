@@ -1,0 +1,91 @@
+Tabulation method for total no of grids
+int uniquePaths(int m, int n) {
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        dp[0][0]=1;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0 && j==0) dp[0][0]=1;
+                else{
+                    int up=0,down=0;
+                    if(i>0) up=dp[i-1][j];
+                    if(j>0) down=dp[i][j-1];
+
+                    dp[i][j]=up+down;
+                }
+            }
+        }
+        return dp[m-1][n-1];
+
+    }
+};
+
+
+memoization meathod 
+class Solution {
+public:
+    int findways(int i,int j,vector<vector<int>>&dp){
+        if(i==0&&j==0){
+            return 1;
+        }
+        if(i<0 || j<0){
+            return 0;
+        }
+        if(dp[i][j]!=-1) return dp[i][j];
+        int up=findways(i-1,j,dp);
+        int down=findways(i,j-1,dp);
+
+        return dp[i][j]=up+down;
+    }
+    int uniquePaths(int m, int n) {
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        return findways(m-1,n-1,dp);
+
+    }
+};class Solution {
+public:
+    int findways(int i,int j,vector<vector<int>>&dp){
+        if(i==0&&j==0){
+            return 1;
+        }
+        if(i<0 || j<0){
+            return 0;
+        }
+        if(dp[i][j]!=-1) return dp[i][j];
+        int up=findways(i-1,j,dp);
+        int down=findways(i,j-1,dp);
+
+        return dp[i][j]=up+down;
+    }
+    int uniquePaths(int m, int n) {
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        return findways(m-1,n-1,dp);
+
+    }
+};
+
+
+optimised space solution
+// User function template in C++
+
+class Solution {
+  public:
+    // Function to find total number of unique paths.
+    int NumberOfPath(int a, int b) {
+        // code here
+        vector<int>prev(a,0);
+        for(int i=0;i<a;i++){
+           vector<int>temp(a,0);
+            for(int j=0;j<b;j++){
+                if(i==0 && j==0) temp[j]=1;
+                else{
+                    int up=0,down=0;
+                    if(i>0) up=prev[j];
+                    if(j>0) down=temp[j-1];
+                    temp[j]=up+down;
+                }
+            }
+            prev=temp;
+        }
+        return prev[b-1];
+    }
+};
