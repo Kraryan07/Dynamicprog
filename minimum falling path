@@ -1,0 +1,83 @@
+memoisation
+class Solution {
+public:
+   int findminsum(vector<vector<int>>&matrix,int i,int j,vector<vector<int>>&dp){
+    int n=matrix.size();
+    if(i==0) return matrix[i][j];
+    if(j<0||j>=n) return  1e9; 
+    if(dp[i][j]!=-101) return dp[i][j];
+      int d=matrix[i][j]+findminsum(matrix,i-1,j,dp);
+      int dr=matrix[i][j]+findminsum(matrix,i-1,j+1,dp);
+      int dl=matrix[i][j]+findminsum(matrix,i-1,j-1,dp);
+
+      return dp[i][j]=min(d,min(dr,dl));
+   }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        int mini=INT_MAX;
+        vector<vector<int>>dp(n,vector<int>(n,-101));
+        for(int j=0;j<n;j++){
+         mini=min(mini,findminsum(matrix,n-1,j,dp));
+        }
+        return mini;
+    }
+};
+
+tabulation
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        
+        for(int j=0;j<n;j++){
+            dp[0][j]=matrix[0][j];
+        }
+          int mini=INT_MAX;
+        for(int i=1;i<n;i++){
+            for(int j=0;j<n;j++){
+               
+                int s=dp[i-1][j];
+                int sl=(j-1>=0)? dp[i-1][j-1]:INT_MAX;
+                int sr=(j+1<n)? dp[i-1][j+1]:INT_MAX;
+
+                dp[i][j]=matrix[i][j]+min(s,min(sl,sr));
+            }
+        }
+        for(int num:dp[n-1]){
+            mini=min(mini,num);
+        }
+        return mini;
+    }
+};
+
+space optimisation
+
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        vector<int> dp(n, -1);
+        
+        for(int j=0;j<n;j++){
+            dp[j]=matrix[0][j];
+        }
+          int mini=INT_MAX;
+        for(int i=1;i<n;i++){
+            vector<int>arr(n,-1);
+            for(int j=0;j<n;j++){
+               
+                int s=dp[j];
+                int sl=(j-1>=0)? dp[j-1]:INT_MAX;
+                int sr=(j+1<n)? dp[j+1]:INT_MAX;
+
+                arr[j]=matrix[i][j]+min(s,min(sl,sr));
+            }
+            dp=arr;
+        }
+        for(int num:dp){
+            mini=min(mini,num);
+        }
+        return mini;
+    }
+};
