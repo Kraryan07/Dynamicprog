@@ -19,3 +19,23 @@
             }
         }
         return dp[n-1][w];
+
+without using wt array
+ int w=price.size();
+        int n=price.size();
+        vector<vector<int>>dp(n,(vector<int>(w+1,0)));
+       
+        for(int i=0;i<=w;i++){
+            dp[0][i]=(i/1)*price[0];
+        }
+        for(int i=1;i<n;i++){
+            for(int t=0;t<=w;t++){
+                int notake=dp[i-1][t];
+                int take=0;
+                if(t>=i+1){
+                    take=price[i]+dp[i][t-(i+1)];
+                }
+                dp[i][t]=max(notake,take);
+            }
+        }
+        return dp[n-1][w];
