@@ -1,0 +1,21 @@
+ int w=price.size();
+        int n=price.size();
+        vector<vector<int>>dp(n,(vector<int>(w+1,0)));
+        vector<int>wt(n);
+        for(int i=0;i<n;i++){
+            wt[i]=i+1;
+        }
+        for(int i=0;i<=w;i++){
+            dp[0][i]=(i/wt[0])*price[0];
+        }
+        for(int i=1;i<n;i++){
+            for(int t=0;t<=w;t++){
+                int notake=dp[i-1][t];
+                int take=0;
+                if(t>=wt[i]){
+                    take=price[i]+dp[i][t-wt[i]];
+                }
+                dp[i][t]=max(notake,take);
+            }
+        }
+        return dp[n-1][w];
